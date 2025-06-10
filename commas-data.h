@@ -43,7 +43,7 @@ void commas_row_add(struct commas_column **column, char *data, const int index);
 struct commas_rows_list *commas_row_get(struct commas_column *column, const int index);
 
 /* Changes the data at the location specified for a specific column. */
-void commas_row_update(struct commas_column **column, const int index);
+void commas_row_update(struct commas_column **column, const int index, const char *data);
 
 /* Deletes a row from a column, which shifts all rows upwards; therefore, the meaning of the data is changed. */
 void commas_row_delete(struct commas_column **column, const int index);

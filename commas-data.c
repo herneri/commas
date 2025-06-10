@@ -105,3 +105,38 @@ struct commas_rows_list *commas_row_get(struct commas_column *column, const int 
 
 	return result;
 }
+
+void commas_row_update(struct commas_column **column, const int index, const char *data) {
+	struct commas_rows_list *temp = NULL;
+
+	if (index <= 0 || index > (*column)->total || (*column)->head == NULL) {
+		return;
+	}
+
+	if (index == 1) {
+		(*column)->head->data = (char *) data;
+		return;
+	} else if (index == (*column)->total) {
+		(*column)->tail->data = (char *) data;
+		return;
+	}
+
+	if (index < ((*column)->total / 2)) {
+		temp = (*column)->head;
+
+		for (int i = 1; i < index; i++) {
+			temp = temp->next;
+		}
+
+		temp->data = (char *) data;
+		return;
+	}
+
+	temp = (*column)->tail;
+	for (int i = (*column)->total; i > index; i--) {
+		temp = temp->previous;
+	}
+
+	temp->data = (char *) data;
+	return;
+}
