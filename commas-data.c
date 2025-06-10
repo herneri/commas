@@ -76,3 +76,32 @@ void commas_row_add(struct commas_column **column, char *data, const int index) 
 	temp->next = new_node;
 	return;
 }
+
+struct commas_rows_list *commas_row_get(struct commas_column *column, const int index) {
+	struct commas_rows_list *result = column->head;
+
+	if (index <= 0 || index > column->total || column->head == NULL) {
+		return NULL;
+	}
+
+	if (index == 1) {
+		return result;
+	} else if (index == column->total) {
+		return column->tail;
+	}
+
+	if (index < (column->total / 2)) {
+		for (int i = 1; i < index; i++) {
+			result = result->next;
+		}
+
+		return result;
+	}
+
+	result = column->tail;
+	for (int i = column->total; i > index; i--) {
+		result = result->previous;
+	}
+
+	return result;
+}
