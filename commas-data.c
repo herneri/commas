@@ -140,3 +140,50 @@ void commas_row_update(struct commas_column **column, const int index, const cha
 	temp->data = (char *) data;
 	return;
 }
+
+void commas_row_delete(struct commas_column **column, const int index) {
+	struct commas_rows_list *temp = NULL;
+	struct commas_rows_list *freed_temp = NULL;
+
+	if (index <= 0 || index > (*column)->total || (*column)->head == NULL) {
+		return;
+	}
+
+	if (index == 1) {
+		temp = (*column)->head;
+		(*column)->head = (*column)->head->next;
+		free(temp);
+		return;
+	} else if (index == (*column)->total) {
+		temp = (*column)->tail;
+		(*column)->tail = (*column)->tail->previous;
+		(*column)->tail->next = NULL;
+		free(temp);
+		return;
+	}
+
+	if (index < ((*column)->total / 2)) {
+		temp = (*column)->head;
+
+		for (int i = 1; i < index; i++) {
+			temp = temp->next;
+		}
+
+		freed_temp = temp;
+		temp->next->previous = temp->previous;
+		temp = temp->next;
+		free(freed_temp);
+		return;
+	}
+
+	temp = (*column)->tail;
+	for (int i = (*column)->total; i > index; i--) {
+		temp = temp->previous;
+	}
+
+	freed_temp = temp;
+	temp->previous->next = temp->next;
+	temp = temp->previous;
+	free(freed_temp);
+	return;
+}
