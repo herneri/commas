@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void commas_row_add(struct commas_column **column, char *data, const int index) {
+void commas_row_add(struct commas_column **column, const int index, const char *data) {
 	struct commas_rows_list *new_node = NULL;
 	struct commas_rows_list *temp = NULL;
 
@@ -32,7 +32,7 @@ void commas_row_add(struct commas_column **column, char *data, const int index) 
 	}
 
 	(*column)->total++;
-	new_node->data = data;
+	new_node->data = (char *) data;
 	new_node->next = NULL;
 	new_node->previous = NULL;
 

@@ -37,7 +37,7 @@ struct commas_column {
 };
 
 /* Adds a row at the specified index under a certain column. */
-void commas_row_add(struct commas_column **column, char *data, const int index);
+void commas_row_add(struct commas_column **column, const int index, const char *data);
 
 /* Retrieves the row struct stored at the specific index under a column. */
 struct commas_rows_list *commas_row_get(struct commas_column *column, const int index);
