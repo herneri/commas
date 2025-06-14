@@ -20,7 +20,7 @@
 	data structures. This data must be freed when done using
 	commas_unload(). Returns a heap-allocated array.
 */
-struct commas_column **commas_load(const char *csv_path);
+struct commas_csv *commas_load(const char *csv_path);
 
 /*
 	Load the rows of a column from a file as a column struct.

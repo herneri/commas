@@ -20,7 +20,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-struct commas_column **commas_load(const char *csv_path) {
+struct commas_csv *commas_load(const char *csv_path) {
+	struct commas_csv *csv_data = NULL;
 	struct commas_column **loaded_data = NULL;
 	FILE *csv_file = NULL;
 
@@ -37,6 +38,11 @@ struct commas_column **commas_load(const char *csv_path) {
 
 	csv_file = fopen(csv_path, "r");
 	if (csv_file == NULL) {
+		return NULL;
+	}
+
+	csv_data = malloc(sizeof(struct commas_csv));
+	if (csv_data == NULL) {
 		return NULL;
 	}
 
@@ -61,6 +67,8 @@ struct commas_column **commas_load(const char *csv_path) {
 	}
 
 	loaded_data = malloc(sizeof(struct commas_column *) * title_count);
+	csv_data->columns = loaded_data;
+	csv_data->total = title_count;
 
 	for (int i = 0; i < title_count; i++) {
 		loaded_data[i] = malloc(sizeof(struct commas_column));
@@ -92,7 +100,7 @@ struct commas_column **commas_load(const char *csv_path) {
 
 	free(buffer);
 	fclose(csv_file);
-	return loaded_data;
+	return csv_data;
 }
 
 struct commas_column *commas_column_get(const char *csv_path, const char *column_name) {

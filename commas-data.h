@@ -36,6 +36,11 @@ struct commas_column {
 	int total;
 };
 
+struct commas_csv {
+	struct commas_column **columns;
+	int total;
+};
+
 /* Adds a row at the specified index under a certain column. */
 void commas_row_add(struct commas_column **column, const int index, const char *data);
 
