@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 struct commas_column **commas_load(const char *csv_path) {
 	struct commas_column **loaded_data = NULL;
@@ -92,4 +93,79 @@ struct commas_column **commas_load(const char *csv_path) {
 	free(buffer);
 	fclose(csv_file);
 	return loaded_data;
+}
+
+struct commas_column *commas_column_get(const char *csv_path, const char *column_name) {
+	struct commas_column *loaded_column = NULL;
+	FILE *csv_file = NULL;
+
+	char *buffer = NULL;
+	size_t buffer_size = 0;
+
+	char *current_title = NULL;
+	int title_index = 0;
+	bool title_found = false;
+
+	int row_index = 1;
+
+	csv_file = fopen(csv_path, "r");
+	if (csv_file == NULL) {
+		return NULL;
+	}
+
+	loaded_column = malloc(sizeof(struct commas_column));
+	if (loaded_column == NULL) {
+		fclose(csv_file);
+		return NULL;
+	}
+
+	getline(&buffer, &buffer_size, csv_file);
+	if (buffer_size == 0) {
+		return NULL;
+	}
+
+	current_title = strdup(strtok(buffer, ","));
+	title_index++;
+
+	while ((current_title = strdup(strtok(NULL, ","))) != NULL) {
+		title_index++;
+
+		if (strcmp(current_title, column_name) == 0) {
+			title_found = true;
+			break;
+		}
+
+		free(current_title);
+	}
+
+	if (title_found == false) {
+		free(loaded_column);
+		free(current_title);
+		fclose(csv_file);
+		return NULL;
+	}
+
+	free(current_title);
+
+	loaded_column->name = (char *) column_name;
+
+	while (getline(&buffer, &buffer_size, csv_file) != -1) {
+		char *data = strdup(strtok(buffer, ","));
+		if (title_index != 1) {
+			free(data);
+		}
+
+		for (int i = 1; i < title_index; i++) {
+			data = strdup(strtok(NULL, ","));
+			if (i + 1 != title_index) {
+				free(data);
+			}
+		}
+
+		commas_row_add(&loaded_column, row_index, data);
+		row_index++;
+	}
+
+	fclose(csv_file);
+	return loaded_column;
 }

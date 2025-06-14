@@ -22,4 +22,10 @@
 */
 struct commas_column **commas_load(const char *csv_path);
 
+/*
+	Load the rows of a column from a file as a column struct.
+	The returned struct must be freed using commas_column_free().
+*/
+struct commas_column *commas_column_get(const char *csv_path, const char *column_name);
+
 #endif /* COMMAS_READ_H */
